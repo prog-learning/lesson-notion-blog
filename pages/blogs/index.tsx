@@ -1,33 +1,67 @@
 import type { GetStaticProps, NextPage } from 'next';
 import { Client } from '@notionhq/client';
+import {
+  GetDatabaseResponse,
+  QueryDatabaseResponse,
+} from '@notionhq/client/build/src/api-endpoints';
 
 const notion = new Client({
   auth: process.env.NOTION_INTEGRATION_TOKEN,
 });
 
 type Props = {
-  data: any;
+  data: {
+    database: GetDatabaseResponse;
+    query: QueryDatabaseResponse;
+  };
 };
 export const getStaticProps = async () => {
   const database_id = process.env.NOTION_DATABASE_ID || '';
-  const response = await notion.databases.retrieve({
+  const database = await notion.databases.retrieve({
     database_id,
   });
-  console.log(response);
+  const query = await notion.databases.query({
+    database_id,
+  });
 
   return {
     props: {
-      data: response,
+      data: {
+        database,
+        query,
+      },
     },
   };
 };
 
 const Blog: NextPage<Props> = ({ data }) => {
   console.log(data);
+  const list = data.query?.results || [];
+
   return (
     <div>
       <h2>Blog一覧</h2>
-      <p>{data.properties.category.select.options[1].name}</p>
+      {list.map((item) => (
+        <div key={item.id}>
+          <h3>
+            {item.properties.title.type === 'title' &&
+              item.properties.title.title[0].plain_text}
+          </h3>
+          <p>
+            カテゴリ：
+            {(item.properties.category.type === 'select' &&
+              item.properties.category.select?.name) ||
+              'カテゴリなし'}
+          </p>
+          <p>
+            日付：
+            {(item.properties.date.type === 'date' &&
+              item.properties.date.date?.start) ||
+              '日付なし'}
+          </p>
+          <hr />
+        </div>
+      ))}
     </div>
   );
 };
