@@ -4,6 +4,7 @@ import {
   GetDatabaseResponse,
   QueryDatabaseResponse,
 } from '@notionhq/client/build/src/api-endpoints';
+import { useRouter } from 'next/router';
 
 const notion = new Client({
   auth: process.env.NOTION_INTEGRATION_TOKEN,
@@ -22,6 +23,22 @@ export const getStaticProps = async () => {
   });
   const query = await notion.databases.query({
     database_id,
+    filter: {
+      or: [
+        {
+          property: 'publish',
+          checkbox: {
+            equals: true,
+          },
+        },
+      ],
+    },
+    sorts: [
+      {
+        property: 'date',
+        direction: 'descending',
+      },
+    ],
   });
 
   return {
@@ -37,6 +54,7 @@ export const getStaticProps = async () => {
 const Blog: NextPage<Props> = ({ data }) => {
   console.log(data);
   const list = data.query?.results || [];
+  const router = useRouter();
 
   return (
     <div>
@@ -59,6 +77,7 @@ const Blog: NextPage<Props> = ({ data }) => {
               item.properties.date.date?.start) ||
               '日付なし'}
           </p>
+          <button onClick={() => router.push(`/blogs/${item.id}`)}>詳細</button>
           <hr />
         </div>
       ))}

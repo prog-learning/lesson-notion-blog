@@ -12,5 +12,5 @@ Notion を DB にした Blog サイトを作ってみる
 
 ## Next Todo
 
-- ブログ詳細ページの追加
 - Notion API 関数をきれいにする
+- NotionBlock をいい感じにしてくれるコンポーネントを作成
