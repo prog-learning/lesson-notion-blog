@@ -1,47 +1,33 @@
-import { Client } from '@notionhq/client';
 import type { GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
+import Head from 'next/head';
+import { BlogDetailPage } from 'src/components/Blogs/BlogDetailPage';
+import { getPostDetail, getPosts } from 'src/lib/notion';
 
-const notion = new Client({
-  auth: process.env.NOTION_INTEGRATION_TOKEN,
-});
-
+/* 記事の内容を静的に保存 */
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const blogId =
     typeof params?.blogId === 'string'
       ? params?.blogId || params?.blogId[0]
       : '';
 
-  const page = await notion.pages.retrieve({
-    page_id: blogId,
-  });
-  const blocks = await notion.blocks.children.list({
-    block_id: blogId,
-  });
-  console.log(blocks);
+  const content = await getPostDetail(blogId);
 
   return {
     props: {
-      content: {
-        page,
-        blocks,
-      },
+      content,
     },
   };
 };
 
+/* 記事のpathを静的に保存 */
 export const getStaticPaths = async () => {
-  const database_id = process.env.NOTION_DATABASE_ID || '';
-  const query = await notion.databases.query({
-    database_id,
-  });
-  const blogIds = query.results.map((item) => item.id);
-  console.log(blogIds);
+  const posts = await getPosts();
+  const paths = posts.map((item) => ({
+    params: { blogId: item.id },
+  }));
 
   return {
-    paths: blogIds.map((id) => ({
-      params: { blogId: id },
-    })),
+    paths,
     fallback: false,
   };
 };
@@ -51,40 +37,15 @@ type Props = {
 };
 
 const BlogDetail: NextPage<Props> = ({ content }) => {
-  const router = useRouter();
-  console.log(content);
   const title = content.page.properties.title.title[0].plain_text;
-  const blocks = content.blocks.results;
 
   return (
-    <div>
-      <h2>{title}</h2>
-      <p>このブログのIDは{router.asPath.split('/')[2]}</p>
-      {blocks.map((block: any) => {
-        console.log(block);
-        if (block.type === 'paragraph') {
-          return (
-            <div key={block.id}>
-              <p>{block.paragraph.text[0]?.plain_text || '　'}</p>
-            </div>
-          );
-        }
-        if (block.type === 'heading_2') {
-          return (
-            <div key={block.id}>
-              <h2>{block.heading_2.text[0]?.plain_text || ' '}</h2>
-            </div>
-          );
-        }
-        if (block.type === 'bulleted_list_item') {
-          return (
-            <div key={block.id}>
-              <li>{block.bulleted_list_item.text[0]?.plain_text || ' '}</li>
-            </div>
-          );
-        }
-      })}
-    </div>
+    <>
+      <Head>
+        <title>{title} | Notion Blog</title>
+      </Head>
+      <BlogDetailPage content={content} />
+    </>
   );
 };
 

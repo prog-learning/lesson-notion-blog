@@ -12,5 +12,5 @@ Notion を DB にした Blog サイトを作ってみる
 
 ## Next Todo
 
-- Notion API 関数をきれいにする
 - NotionBlock をいい感じにしてくれるコンポーネントを作成
+- HOME に最新の記事を 3 つだけ表示する
