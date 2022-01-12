@@ -4,9 +4,9 @@ type Props = {};
 
 export const HomePage: VFC<Props> = () => {
   return (
-    <div>
+    <div className='text-center'>
       <h2>HOME</h2>
-      <p>ここはHOMEです！</p>
+      <p>最新の記事を3つ表示したい</p>
     </div>
   );
 };
