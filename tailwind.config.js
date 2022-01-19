@@ -3,5 +3,10 @@ module.exports = {
   theme: {
     extend: {},
   },
+  safelist: [
+    {
+      pattern: /text-(red|green|blue)-(100|200|300)/,
+    },
+  ],
   plugins: [],
 };
