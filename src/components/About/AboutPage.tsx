@@ -1,18 +1,22 @@
 import { VFC } from 'react';
+import Content from './contents.mdx';
+import { MDXProvider } from '@mdx-js/react';
 
 type Props = {};
 
+const components = {
+  h1: (props: any) => <h1 className='text-3xl' {...props} />,
+  h2: (props: any) => <h2 className='text-xl font-bold' {...props} />,
+  h3: (props: any) => <h3 className='text-lg font-bold' {...props} />,
+  ul: (props: any) => <ul className=' list-disc pl-8' {...props} />,
+};
+
 export const AboutPage: VFC<Props> = () => {
   return (
-    <div>
-      <h1>このブログにについて</h1>
-      <p>このブログはNotionのノートがそのまま反映されるすごいBlogです.</p>
-      <h2>使用していいる技術</h2>
-      <li>Next.js</li>
-      <li>TypeScript</li>
-      <li>Notion API</li>
-      <li>Tailwind</li>
-      <li>SWR</li>
+    <div className='space-y-4'>
+      <MDXProvider components={components}>
+        <Content />
+      </MDXProvider>
     </div>
   );
 };
