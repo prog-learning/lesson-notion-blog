@@ -1,26 +1,21 @@
 import { useState, VFC } from 'react';
+import { BlogItem } from '../Blogs/BlogItem';
 import { Button } from './Button';
 
-type Props = {};
+type Props = {
+  currentThreePosts: any[];
+};
 
-export const HomePage: VFC<Props> = () => {
-  const [classStr, setClassStr] = useState('text-red-400');
+export const HomePage: VFC<Props> = ({ currentThreePosts }) => {
+  console.log(currentThreePosts);
   return (
     <div className='text-center'>
-      <h2>HOME</h2>
-      <p>最新の記事を3つ表示したい</p>
-      <input
-        type='text'
-        className='border'
-        value={classStr}
-        onChange={(e) => setClassStr(e.target.value)}
-      />
-      <div>
-        <p className={classStr}>これはクラスで指定した文字列です</p>
+      <h2 className='text-xl'>最近の記事</h2>
+      <div className='border-2 w-[600px] mt-4 mx-auto divide-y-2 divide-gray-400 rounded-lg border-gray-400'>
+        {currentThreePosts?.map((post) => (
+          <BlogItem key={post.id} post={post} />
+        ))}
       </div>
-      <Button color='red'>red</Button>
-      <Button color='blue'>blue</Button>
-      <Button color='green'>green</Button>
     </div>
   );
 };

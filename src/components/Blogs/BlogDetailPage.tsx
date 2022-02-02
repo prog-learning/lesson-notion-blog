@@ -10,8 +10,6 @@ export const BlogDetailPage: VFC<Props> = ({ content }) => {
   const title = content.page.properties.title.title[0].plain_text;
   const blocks = content.blocks.results;
 
-  console.log(blocks);
-
   return (
     <div>
       <h1 className='text-2xl font-bold my-4'>{title}</h1>

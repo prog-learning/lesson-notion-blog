@@ -7,7 +7,7 @@ type Props = {
 
 export const Layout: VFC<Props> = ({ children }) => {
   return (
-    <div className='min-h-screen relative'>
+    <div className='min-h-screen relative max-w-[1080px] mx-auto'>
       <header className='text-center py-4 border-b'>
         <h1 className='text-2xl font-bold'>Lesson Notion Blog</h1>
         <div className='flex justify-center items-center gap-4 mt-4'>

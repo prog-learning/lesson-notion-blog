@@ -7,7 +7,7 @@ const notion = new Client({
 const database_id = process.env.NOTION_DATABASE_ID || '';
 
 /* 記事の一覧を取得 */
-export const getPosts = async (): Promise<any[]> => {
+export const getPosts = async (page_size: number = 10): Promise<any[]> => {
   /* データベースに関する情報の取得 */
   // const database = await notion.databases.retrieve({
   //   database_id,
@@ -16,6 +16,7 @@ export const getPosts = async (): Promise<any[]> => {
   /* 記事の一覧の取得 */
   const query = await notion.databases.query({
     database_id,
+    page_size,
     filter: {
       or: [
         {
