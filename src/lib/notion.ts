@@ -13,6 +13,8 @@ export const getPosts = async (page_size: number = 10): Promise<any[]> => {
   //   database_id,
   // });
 
+  const results = [];
+
   /* 記事の一覧の取得 */
   const query = await notion.databases.query({
     database_id,
@@ -34,8 +36,48 @@ export const getPosts = async (page_size: number = 10): Promise<any[]> => {
       },
     ],
   });
+  results.push(...query.results);
 
-  return query.results;
+  /* 記事を全部取得する処理 */
+  let has_more = query.has_more;
+  let next_cursor = query.next_cursor;
+
+  while (has_more) {
+    if (!next_cursor) {
+      break;
+    }
+    const query = await notion.databases.query({
+      database_id,
+      page_size,
+      start_cursor: next_cursor,
+      filter: {
+        or: [
+          {
+            property: 'publish',
+            checkbox: {
+              equals: true,
+            },
+          },
+        ],
+      },
+      sorts: [
+        {
+          property: 'date',
+          direction: 'descending',
+        },
+      ],
+    });
+
+    results.push(...query.results);
+
+    has_more = query.has_more;
+    next_cursor = query.next_cursor;
+  }
+
+  console.log(query.has_more);
+  console.log(query.next_cursor);
+
+  return results;
 };
 
 /* 記事の詳細を取得 */

@@ -11,4 +11,4 @@ Notion を DB にした Blog サイトを作ってみる
 
 ## Next Todo
 
-- NotionBlock をいい感じにしてくれるコンポーネントを作成
+- ページネーションの実装
