@@ -7,7 +7,7 @@ type Props = {
 
 export const Layout: VFC<Props> = ({ children }) => {
   return (
-    <div className='min-h-screen relative max-w-[1080px] mx-auto'>
+    <div className='min-h-screen relative max-w-[1080px] mx-auto pb-12'>
       <header className='text-center py-4 border-b'>
         <h1 className='text-2xl font-bold'>Lesson Notion Blog</h1>
         <div className='flex justify-center items-center gap-4 mt-4'>
@@ -23,7 +23,7 @@ export const Layout: VFC<Props> = ({ children }) => {
         </div>
       </header>
       <main className='px-8 py-6'>{children}</main>
-      <footer className='text-center bg-black text-white py-2 absolute bottom-0 w-screen'>
+      <footer className='text-center bg-black text-white py-2 absolute left-0 bottom-0 w-full'>
         © progLearning
       </footer>
     </div>

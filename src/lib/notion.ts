@@ -37,6 +37,7 @@ export const getPosts = async (page_size: number = 10): Promise<any[]> => {
     ],
   });
   results.push(...query.results);
+  if (page_size === 3) return results;
 
   /* 記事を全部取得する処理 */
   let has_more = query.has_more;
