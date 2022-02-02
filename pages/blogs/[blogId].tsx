@@ -16,7 +16,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       content,
     },
-    revalidate: 10,
+    revalidate: 60,
   };
 };
 
@@ -29,7 +29,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   };
 };
 

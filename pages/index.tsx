@@ -9,7 +9,7 @@ export const getStaticProps = async () => {
 
   return {
     props: { currentThreePosts },
-    revalidate: 10,
+    revalidate: 60,
   };
 };
 
