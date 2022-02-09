@@ -11,4 +11,4 @@ Notion を DB にした Blog サイトを作ってみる
 
 ## Next Todo
 
-- ページネーションの実装
+completed!!
